@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="en" class="theme-light"> <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP Quota Tracker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <style>
+        /* --- Base Variables & Theme Setup --- */
+        :root {
+            /* --- Light Theme (Default) --- */
+            --theme-light-bg-primary: #f1f5f9; /* slate-100 */
+            --theme-light-bg-secondary: #ffffff; /* white */
+            --theme-light-bg-tertiary: #f8fafc; /* slate-50 */
+            --theme-light-text-primary: #1e293b; /* slate-800 */
+            --theme-light-text-secondary: #475569; /* slate-600 */
+            --theme-light-text-muted: #64748b; /* slate-500 */
+            --theme-light-border-primary: #e2e8f0; /* slate-200 */
+            --theme-light-border-secondary: #cbd5e1; /* slate-300 */
+            --theme-light-accent-primary: #475569; /* slate-600 */
+            --theme-light-accent-primary-hover: #334155; /* slate-700 */
+            --theme-light-accent-secondary: #3b82f6; /* blue-500 */
+            --theme-light-accent-secondary-hover: #2563eb; /* blue-600 */
+            --theme-light-success: #16a34a; /* green-600 */
+            --theme-light-success-hover: #15803d; /* green-700 */
+            --theme-light-danger: #dc2626; /* red-600 */
+            --theme-light-danger-hover: #b91c1c; /* red-700 */
+            --theme-light-warning: #f97316; /* orange-500 */
+            --theme-light-warning-hover: #ea580c; /* orange-600 */
+            --theme-light-highlight-bg: #fef9c3; /* yellow-100 */
+            --theme-light-highlight-text: #ca8a04; /* yellow-600 */
+            --theme-light-highlight-border: #facc15; /* yellow-400 */
+
+            /* --- Dark Theme --- */
+            --theme-dark-bg-primary: #1e293b; /* slate-800 */
+            --theme-dark-bg-secondary: #334155; /* slate-700 */
+            --theme-dark-bg-tertiary: #475569; /* slate-600 */
+            --theme-dark-text-primary: #f1f5f9; /* slate-100 */
+            --theme-dark-text-secondary: #94a3b8; /* slate-400 */
+            --theme-dark-text-muted: #64748b; /* slate-500 */
+            --theme-dark-border-primary: #475569; /* slate-600 */
+            --theme-dark-border-secondary: #64748b; /* slate-500 */
+            --theme-dark-accent-primary: #94a3b8; /* slate-400 */
+            --theme-dark-accent-primary-hover: #e2e8f0; /* slate-200 */
+            --theme-dark-accent-secondary: #60a5fa; /* blue-400 */
+            --theme-dark-accent-secondary-hover: #93c5fd; /* blue-300 */
+            --theme-dark-success: #4ade80; /* green-400 */
+            --theme-dark-success-hover: #86efac; /* green-300 */
+            --theme-dark-danger: #f87171; /* red-400 */
+            --theme-dark-danger-hover: #fca5a5; /* red-300 */
+            --theme-dark-warning: #fb923c; /* orange-400 */
+            --theme-dark-warning-hover: #fdba74; /* orange-300 */
+            --theme-dark-highlight-bg: #4a5568; /* slate-600 */
+            --theme-dark-highlight-text: #fcd34d; /* yellow-300 */
+            --theme-dark-highlight-border: #fcd34d; /* yellow-300 */
+
+            /* --- Military Theme --- */
+            --theme-military-bg-primary: #e0e6d7; /* Light olive */
+            --theme-military-bg-secondary: #f5f5f0; /* Off white */
+            --theme-military-bg-tertiary: #e8ede5; /* Lighter olive */
+            --theme-military-text-primary: #3a3f34; /* Dark olive */
+            --theme-military-text-secondary: #5f6754; /* Medium olive */
+            --theme-military-text-muted: #879177; /* Lighter olive */
+            --theme-military-border-primary: #c8d1be;
+            --theme-military-border-secondary: #b4bfab;
+            --theme-military-accent-primary: #5f6754; /* Medium olive */
+            --theme-military-accent-primary-hover: #4b5341; /* Darker olive */
+            --theme-military-accent-secondary: #8b4513; /* Saddle brown */
+            --theme-military-accent-secondary-hover: #7a3c10;
+            --theme-military-success: #556b2f; /* Dark olive green */
+            --theme-military-success-hover: #445625;
+            --theme-military-danger: #b22222; /* Firebrick */
+            --theme-military-danger-hover: #8b1a1a;
+            --theme-military-warning: #b8860b; /* DarkGoldenrod */
+            --theme-military-warning-hover: #a0740a;
+            --theme-military-highlight-bg: #f0e68c; /* Khaki */
+            --theme-military-highlight-text: #556b2f; /* Dark olive green */
+            --theme-military-highlight-border: #bdb76b; /* Dark khaki */
+
+            /* --- Modern Theme --- */
+            --theme-modern-bg-primary: #f9fafb; /* gray-50 */
+            --theme-modern-bg-secondary: #ffffff; /* white */
+            --theme-modern-bg-tertiary: #f3f4f6; /* gray-100 */
+            --theme-modern-text-primary: #111827; /* gray-900 */
+            --theme-modern-text-secondary: #4b5563; /* gray-600 */
+            --theme-modern-text-muted: #6b7280; /* gray-500 */
+            --theme-modern-border-primary: #e5e7eb; /* gray-200 */
+            --theme-modern-border-secondary: #d1d5db; /* gray-300 */
+            --theme-modern-accent-primary: #4f46e5; /* indigo-600 */
+            --theme-modern-accent-primary-hover: #4338ca; /* indigo-700 */
+            --theme-modern-accent-secondary: #0ea5e9; /* sky-500 */
+            --theme-modern-accent-secondary-hover: #0284c7; /* sky-600 */
+            --theme-modern-success: #10b981; /* emerald-500 */
+            --theme-modern-success-hover: #059669; /* emerald-600 */
+            --theme-modern-danger: #ef4444; /* red-500 */
+            --theme-modern-danger-hover: #dc2626; /* red-600 */
+            --theme-modern-warning: #f59e0b; /* amber-500 */
+            --theme-modern-warning-hover: #d97706; /* amber-600 */
+            --theme-modern-highlight-bg: #ecfccb; /* lime-100 */
+            --theme-modern-highlight-text: #65a30d; /* lime-600 */
+            --theme-modern-highlight-border: #a3e635; /* lime-400 */
+
+
+            /* --- Default Unit Border Colors (Theme Agnostic Base Values) --- */
+            --color-mphq-base: #2d3748;
+            --color-1leb-base: #3182ce;
+            --color-srt-base: #9f7aea;
+            --color-cid-base: #dd6b20;
+
+            /* --- Apply Theme Variables Dynamically --- */
+            --bg-primary: var(--theme-light-bg-primary);
+            --bg-secondary: var(--theme-light-bg-secondary);
+            --bg-tertiary: var(--theme-light-bg-tertiary);
+            --text-primary: var(--theme-light-text-primary);
+            --text-secondary: var(--theme-light-text-secondary);
+            --text-muted: var(--theme-light-text-muted);
+            --border-primary: var(--theme-light-border-primary);
+            --border-secondary: var(--theme-light-border-secondary);
+            --accent-primary: var(--theme-light-accent-primary);
+            --accent-primary-hover: var(--theme-light-accent-primary-hover);
+            --accent-secondary: var(--theme-light-accent-secondary);
+            --accent-secondary-hover: var(--theme-light-accent-secondary-hover);
+            --success: var(--theme-light-success);
+            --success-hover: var(--theme-light-success-hover);
+            --danger: var(--theme-light-danger);
+            --danger-hover: var(--theme-light-danger-hover);
+            --warning: var(--theme-light-warning);
+            --warning-hover: var(--theme-light-warning-hover);
+            --highlight-bg: var(--theme-light-highlight-bg);
+            --highlight-text: var(--theme-light-highlight-text);
+            --highlight-border: var(--theme-light-highlight-border);
+            /* Unit borders will be set via JS based on customColors state */
+            --border-mphq: var(--color-mphq-base); /* Initialize with base */
+            --border-1leb: var(--color-1leb-base);
+            --border-srt: var(--color-srt-base);
+            --border-cid: var(--color-cid-base);
+        }
+
+        /* Apply theme variables based on html class */
+        html.theme-dark {
+            --bg-primary: var(--theme-dark-bg-primary); --bg-secondary: var(--theme-dark-bg-secondary); --bg-tertiary: var(--theme-dark-bg-tertiary);
+            --text-primary: var(--theme-dark-text-primary); --text-secondary: var(--theme-dark-text-secondary); --text-muted: var(--theme-dark-text-muted);
+            --border-primary: var(--theme-dark-border-primary); --border-secondary: var(--theme-dark-border-secondary);
+            --accent-primary: var(--theme-dark-accent-primary); --accent-primary-hover: var(--theme-dark-accent-primary-hover);
+            --accent-secondary: var(--theme-dark-accent-secondary); --accent-secondary-hover: var(--theme-dark-accent-secondary-hover);
+            --success: var(--theme-dark-success); --success-hover: var(--theme-dark-success-hover);
+            --danger: var(--theme-dark-danger); --danger-hover: var(--theme-dark-danger-hover);
+            --warning: var(--theme-dark-warning); --warning-hover: var(--theme-dark-warning-hover);
+            --highlight-bg: var(--theme-dark-highlight-bg); --highlight-text: var(--theme-dark-highlight-text); --highlight-border: var(--theme-dark-highlight-border);
+        }
+        html.theme-military {
+            --bg-primary: var(--theme-military-bg-primary); --bg-secondary: var(--theme-military-bg-secondary); --bg-tertiary: var(--theme-military-bg-tertiary);
+            --text-primary: var(--theme-military-text-primary); --text-secondary: var(--theme-military-text-secondary); --text-muted: var(--theme-military-text-muted);
+            --border-primary: var(--theme-military-border-primary); --border-secondary: var(--theme-military-border-secondary);
+            --accent-primary: var(--theme-military-accent-primary); --accent-primary-hover: var(--theme-military-accent-primary-hover);
+            --accent-secondary: var(--theme-military-accent-secondary); --accent-secondary-hover: var(--theme-military-accent-secondary-hover);
+            --success: var(--theme-military-success); --success-hover: var(--theme-military-success-hover);
+            --danger: var(--theme-military-danger); --danger-hover: var(--theme-military-danger-hover);
+            --warning: var(--theme-military-warning); --warning-hover: var(--theme-military-warning-hover);
+            --highlight-bg: var(--theme-military-highlight-bg); --highlight-text: var(--theme-military-highlight-text); --highlight-border: var(--theme-military-highlight-border);
+        }
+         html.theme-modern {
+            --bg-primary: var(--theme-modern-bg-primary); --bg-secondary: var(--theme-modern-bg-secondary); --bg-tertiary: var(--theme-modern-bg-tertiary);
+            --text-primary: var(--theme-modern-text-primary); --text-secondary: var(--theme-modern-text-secondary); --text-muted: var(--theme-modern-text-muted);
+            --border-primary: var(--theme-modern-border-primary); --border-secondary: var(--theme-modern-border-secondary);
+            --accent-primary: var(--theme-modern-accent-primary); --accent-primary-hover: var(--theme-modern-accent-primary-hover);
+            --accent-secondary: var(--theme-modern-accent-secondary); --accent-secondary-hover: var(--theme-modern-accent-secondary-hover);
+            --success: var(--theme-modern-success); --success-hover: var(--theme-modern-success-hover);
+            --danger: var(--theme-modern-danger); --danger-hover: var(--theme-modern-danger-hover);
+            --warning: var(--theme-modern-warning); --warning-hover: var(--theme-modern-warning-hover);
+            --highlight-bg: var(--theme-modern-highlight-bg); --highlight-text: var(--theme-modern-highlight-text); --highlight-border: var(--theme-modern-highlight-border);
+        }
+
+
+        /* Apply Theme Variables */
+        body { /* ... V5 ... */ font-family: 'Inter', sans-serif; background-color: var(--bg-primary); color: var(--text-primary); transition: background-color 0.3s ease, color 0.3s ease; }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background-color: var(--text-muted); border-radius: 20px; border: 2px solid var(--bg-primary); }
+        ::-webkit-scrollbar-thumb:hover { background-color: var(--text-secondary); }
+
+        /* Card Styling */
+        .card { /* ... V5 ... */ background-color: var(--bg-secondary); border-radius: 0.75rem; padding: 1rem 1.5rem; margin-bottom: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); border: 1px solid var(--border-primary); transition: background-color 0.3s ease, border-color 0.3s ease; }
+        .unit-card { /* ... V5 ... */ border-left-width: 5px; }
+
+        /* --- Hierarchy Borders (Applied via JS using customColors state) --- */
+        .unit-card[data-unit-id="MPHQ"] { border-left-color: var(--border-mphq); }
+        .unit-card[data-unit-id="1LEB"] { border-left-color: var(--border-1leb); }
+        .unit-card[data-unit-id="SRT"] { border-left-color: var(--border-srt); }
+        .unit-card[data-unit-id="CID"] { border-left-color: var(--border-cid); }
+
+        /* --- Faded Sub-unit borders --- */
+        .unit-level-3[data-unit-path^="1LEB."] { border-left-color: color-mix(in srgb, var(--border-1leb) 70%, var(--bg-secondary)); }
+        .unit-level-4[data-unit-path^="1LEB."] { border-left-color: color-mix(in srgb, var(--border-1leb) 40%, var(--bg-secondary)); }
+        /* SRT sub-units inherit SRT color directly */
+        .unit-level-3[data-unit-path^="SRT."] { border-left-color: var(--border-srt); }
+
+
+        /* --- Indentation --- */
+        .unit-level-1 { margin-left: 0; } .unit-level-2 { margin-left: 1rem; } .unit-level-3 { margin-left: 2rem; } .unit-level-4 { margin-left: 3rem; }
+        .squad-list { margin-left: 4rem; padding-left: 1rem; border-left: 2px dashed var(--border-secondary); margin-top: 0.75rem; }
+
+        /* Typography & Headers */
+         h1, h2, h3 { color: var(--text-primary); }
+         h3 { font-weight: 600; margin-bottom: 0.75rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+         h4 { font-weight: 500; color: var(--text-secondary); margin-bottom: 0.5rem; font-size: 0.9rem; }
+         h5 { font-weight: 500; color: var(--text-muted); margin-bottom: 0.25rem; font-size: 0.8rem; }
+
+         /* Buttons */
+         .action-btn {
+            background-color: var(--accent-primary); color: white; padding: 0.35rem 0.7rem;
+            border-radius: 0.5rem; font-size: 0.8rem; margin-left: 0.25rem;
+            transition: background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease; /* Adjusted transition */
+            cursor: pointer; border: none; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            display: inline-flex; align-items: center;
+        }
+         .action-btn i { margin-right: 0.35rem; }
+         .action-btn:hover {
+             /* background-color: var(--accent-primary-hover); */ /* Keep bg same, rely on scale/shadow */
+             transform: scale(1.05); /* Scale up on hover */
+             box-shadow: 0 4px 10px -1px rgba(0, 0, 0, 0.15), 0 2px 6px -1px rgba(0, 0, 0, 0.1);
+         }
+         .action-btn:active { transform: scale(0.98); /* Slightly smaller scale on active */ }
+         .action-btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; transform: scale(1); } /* Reset transform/shadow when disabled */
+         .action-btn:disabled:hover { background-color: var(--accent-primary); transform: scale(1); }
+
+         /* Specific Button Colors */
+         .log-activity-btn { background-color: var(--success); } .log-activity-btn:hover:not(:disabled) { background-color: var(--success); } .log-activity-btn:active { background-color: var(--success-hover); }
+         .view-details-btn { background-color: var(--accent-secondary); } .view-details-btn:hover:not(:disabled) { background-color: var(--accent-secondary); } .view-details-btn:active { background-color: var(--accent-secondary-hover); }
+         .remove-personnel-btn { background-color: var(--danger); } .remove-personnel-btn:hover:not(:disabled) { background-color: var(--danger); } .remove-personnel-btn:active { background-color: var(--danger-hover); }
+         .save-btn { background-color: var(--warning); } .save-btn:hover:not(:disabled) { background-color: var(--warning); } .save-btn:active { background-color: var(--warning-hover); }
+         .add-personnel-btn.text-xs { font-size: 0.75rem; padding: 0.25rem 0.5rem; }
+
+         .unit-actions button { margin-top: 0.25rem; }
+
+         /* Personnel Card */
+         .personnel-card { /* ... V5 ... */ background-color: var(--bg-tertiary); border: 1px solid var(--border-primary); border-radius: 0.5rem; padding: 0.75rem 1rem; margin-bottom: 0.5rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; transition: background-color 0.2s ease, border-color 0.2s ease; }
+         .personnel-card.newly-added { /* ... V5 ... */ animation: fadeIn 0.5s ease-out; }
+         @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+         .personnel-info { /* ... V5 ... */ flex-grow: 1; margin-right: 1rem; color: var(--text-secondary); }
+         .personnel-info .font-medium { color: var(--text-primary); transition: color 0.2s ease, font-weight 0.2s ease; } /* Add transition */
+         .personnel-actions { flex-shrink: 0; }
+
+         /* --- Highlight Weekly Winners --- */
+         .personnel-card.is-winner {
+             background-color: var(--highlight-bg);
+             border-color: var(--highlight-border);
+         }
+         .personnel-card.is-winner .personnel-info .font-medium {
+             font-weight: 700; /* Bolder */
+             color: var(--highlight-text); /* Highlight color */
+             font-size: 1.05em; /* Slightly larger */
+         }
+         .winner-icon {
+             color: var(--highlight-text);
+             margin-left: 0.5rem;
+             font-size: 0.9em; /* Slightly smaller than text */
+             display: inline-block; /* Needed for potential animation */
+             animation: pulseStar 1.5s infinite ease-in-out;
+         }
+         @keyframes pulseStar {
+             0%, 100% { transform: scale(1); }
+             50% { transform: scale(1.2); }
+         }
+
+
+         /* Quota Status */
+        .quota-met { color: var(--success); font-weight: 600; }
+        .quota-not-met { color: var(--danger); font-weight: 600; }
+
+        /* Modal Styling */
+        .modal { /* ... V5 ... */ display: none; position: fixed; z-index: 50; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); opacity: 0; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .modal.active { /* ... V5 ... */ display: block; opacity: 1; visibility: visible; }
+        .modal-content { /* ... V5 ... */ background-color: var(--bg-secondary); margin: 10% auto; padding: 2rem; border: 1px solid var(--border-primary); width: 90%; max-width: 500px; border-radius: 0.75rem; position: relative; transform: scale(0.9); transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); }
+        .modal.active .modal-content { /* ... V5 ... */ transform: scale(1); }
+        .close-btn { /* ... V5 ... */ color: var(--text-muted); position: absolute; top: 1rem; right: 1rem; font-size: 24px; font-weight: bold; cursor: pointer; transition: color 0.2s ease; }
+        .close-btn:hover, .close-btn:focus { color: var(--text-primary); text-decoration: none; }
+        .modal label { /* ... V5 ... */ display: block; margin-bottom: 0.5rem; font-weight: 500; color: var(--text-secondary); }
+        .modal input[type="text"], .modal input[type="number"] { /* ... V5 ... */ width: 100%; padding: 0.6rem; margin-bottom: 1rem; border: 1px solid var(--border-secondary); border-radius: 0.5rem; background-color: var(--bg-primary); color: var(--text-primary); transition: border-color 0.2s ease, background-color 0.2s ease; }
+        .modal input:focus { /* ... V5 ... */ outline: none; border-color: var(--accent-secondary); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-secondary) 30%, transparent); }
+        .modal .modal-submit-btn { /* ... V5 ... */ background-color: var(--accent-primary); color: white; padding: 0.75rem 1.5rem; border-radius: 0.5rem; transition: background-color 0.2s ease, transform 0.1s ease; cursor: pointer; width: 100%; border: none; font-size: 1rem; font-weight: 500; }
+        .modal .modal-submit-btn:hover { background-color: var(--accent-primary-hover); transform: scale(1.02); }
+        .modal .modal-submit-btn:active { transform: scale(0.98); }
+
+        /* Custom Dropdown Styles */
+        .custom-dropdown { /* ... V5 ... */ position: relative; width: 100%; margin-bottom: 1rem; }
+        .dropdown-selected { /* ... V5 ... */ width: 100%; padding: 0.6rem; border: 1px solid var(--border-secondary); border-radius: 0.5rem; background-color: var(--bg-secondary); color: var(--text-primary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; user-select: none; transition: border-color 0.2s ease, background-color 0.2s ease; }
+        .dropdown-selected:focus { /* ... V5 ... */ outline: none; border-color: var(--accent-secondary); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent-secondary) 30%, transparent); }
+        .custom-dropdown[style*="opacity: 0.6"] .dropdown-selected { /* ... V5 ... */ background-color: var(--bg-tertiary); color: var(--text-muted); cursor: not-allowed; }
+        .dropdown-selected::after { /* ... V5 ... */ content: '\f078'; font-family: 'Font Awesome 5 Free', 'Font Awesome 6 Free'; font-weight: 900; margin-left: 0.5rem; transition: transform 0.2s ease; color: var(--text-muted); }
+        .custom-dropdown.open .dropdown-selected::after { /* ... V5 ... */ transform: rotate(180deg); }
+        .dropdown-options {
+            /* ... V5 ... */ display: none; position: absolute; top: 100%; left: 0; right: 0;
+            background-color: var(--bg-secondary); border: 1px solid var(--border-secondary);
+            border-top: none; border-radius: 0 0 0.5rem 0.5rem; max-height: 200px; overflow-y: auto; z-index: 60;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1); margin-top: -1px;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+            /* --- Custom Scrollbar for Dropdown Options --- */
+            scrollbar-width: thin; /* Firefox */
+            scrollbar-color: var(--text-muted) var(--bg-tertiary); /* Firefox */
+        }
+         .dropdown-options::-webkit-scrollbar { width: 6px; }
+         .dropdown-options::-webkit-scrollbar-track { background: var(--bg-tertiary); border-radius: 0 0 0.5rem 0; } /* Match corner */
+         .dropdown-options::-webkit-scrollbar-thumb { background-color: var(--text-muted); border-radius: 3px; border: 1px solid var(--bg-tertiary); }
+         .dropdown-options::-webkit-scrollbar-thumb:hover { background-color: var(--text-secondary); }
+
+        .custom-dropdown.open .dropdown-options { display: block; }
+        .dropdown-option { /* ... V5 ... */ padding: 0.6rem; cursor: pointer; transition: background-color 0.1s ease; color: var(--text-secondary); }
+        .dropdown-option:hover { background-color: var(--bg-tertiary); color: var(--text-primary); }
+        .dropdown-option.disabled { /* ... V5 ... */ color: var(--text-muted); cursor: not-allowed; background-color: color-mix(in srgb, var(--bg-tertiary) 50%, var(--bg-secondary)); }
+        .dropdown-option.selected { /* ... V5 ... */ background-color: var(--accent-primary); color: white; }
+        .dropdown-option.selected:hover { background-color: var(--accent-primary-hover); }
+
+        /* Autosave Indicator */
+        #autosave-indicator { /* ... V5 ... */ font-size: 0.75rem; color: var(--text-muted); margin-left: 0.5rem; opacity: 0; transition: opacity 0.5s ease; }
+        #autosave-indicator.visible { /* ... V5 ... */ opacity: 1; }
+
+        /* Settings Panel */
+        #settings-btn { /* ... V5 ... */ position: fixed; bottom: 1rem; right: 1rem; background-color: var(--accent-primary); color: white; border-radius: 50%; width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); cursor: pointer; transition: background-color 0.2s ease, transform 0.2s ease; z-index: 40; }
+        #settings-btn:hover { background-color: var(--accent-primary-hover); transform: scale(1.1); }
+        #settings-panel {
+            /* ... V5 ... */ position: fixed; bottom: 60px; right: 1rem; width: 280px; /* Slightly wider */
+            background-color: var(--bg-secondary); border-radius: 0.75rem; /* Match card radius */
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); padding: 1.5rem; /* More padding */
+            z-index: 40; border: 1px solid var(--border-primary);
+            transform: translateY(10px) scale(0.95); opacity: 0; visibility: hidden;
+            transition: transform 0.2s ease-out, opacity 0.2s ease-out, visibility 0.2s ease-out;
+        }
+        #settings-panel.active { /* ... V5 ... */ transform: translateY(0) scale(1); opacity: 1; visibility: visible; }
+        .setting-group { margin-bottom: 1.25rem; } /* More spacing */
+        .setting-group:last-child { margin-bottom: 0; }
+        .setting-group label { font-weight: 600; color: var(--text-secondary); font-size: 0.9rem; display: block; margin-bottom: 0.6rem; }
+        .color-swatch-container { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
+        .color-swatch {
+            width: 26px; height: 26px; border-radius: 50%; cursor: pointer;
+            border: 3px solid var(--bg-secondary); /* Border matches background for deselected */
+            outline: 1px solid var(--border-secondary); /* Subtle outline */
+            transition: border-color 0.2s ease, transform 0.1s ease;
+        }
+        .color-swatch:hover { transform: scale(1.1); }
+        .color-swatch.selected { border-color: var(--accent-secondary); /* Highlight selected */ }
+        .color-swatch.default-swatch { /* Style the default button */
+            background-color: var(--bg-tertiary);
+            border-color: var(--border-secondary);
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            display: flex; justify-content: center; align-items: center;
+            font-weight: 500;
+        }
+        .color-swatch.default-swatch:hover { background-color: var(--border-primary); }
+        .theme-btn-container { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .theme-btn {
+            padding: 0.4rem 0.8rem; border-radius: 0.5rem; font-size: 0.8rem;
+            background-color: var(--bg-tertiary); color: var(--text-secondary);
+            border: 1px solid var(--border-secondary); cursor: pointer;
+            transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+        }
+        .theme-btn.active { background-color: var(--accent-primary); color: white; border-color: var(--accent-primary); font-weight: 500; }
+        .theme-btn:hover:not(.active) { background-color: var(--bg-primary); transform: translateY(-1px); }
+
+
+        /* Responsive Design */
+        @media (max-width: 640px) {
+             h1 { font-size: 1.5rem; }
+             .card { padding: 1rem; }
+             .unit-card h3 { flex-direction: column; align-items: flex-start; }
+             .unit-actions { margin-top: 0.5rem; width: 100%; }
+             .unit-actions button { margin-left: 0; margin-right: 0.5rem; }
+             .personnel-card { flex-direction: column; align-items: flex-start; }
+             .personnel-actions { margin-top: 0.5rem; width: 100%; display: flex; justify-content: flex-start; }
+             .personnel-actions button { margin-left: 0; margin-right: 0.5rem; }
+             .modal-content { width: 95%; margin: 10% auto; padding: 1.5rem; }
+             .unit-level-2 { margin-left: 0.75rem; } .unit-level-3 { margin-left: 1.5rem; } .unit-level-4 { margin-left: 2.25rem; } .squad-list { margin-left: 3rem; }
+             #settings-btn { bottom: 0.75rem; right: 0.75rem; }
+             #settings-panel { bottom: 55px; right: 0.75rem; width: calc(100% - 1.5rem); }
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="p-4 md:p-8">
+
+    <header class="mb-6 flex justify-between items-center flex-wrap gap-y-2">
+        <h1 class="text-3xl md:text-4xl font-bold">MP Quota Tracker</h1>
+        <div class="flex items-center">
+            <button onclick="manualSave()" class="action-btn save-btn"><i class="fas fa-save"></i> Save Data</button>
+            <span id="autosave-indicator"><i class="fas fa-check-circle"></i> Autosaved</span>
+        </div>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="card">
+            <h2 class="text-lg font-semibold mb-2">Officer of the Week</h2>
+            <p id="officer-of-week" class="text-lg font-medium text-[--text-secondary]">-</p>
+        </div>
+        <div class="card">
+            <h2 class="text-lg font-semibold mb-2">Enlisted of the Week</h2>
+            <p id="enlisted-of-week" class="text-lg font-medium text-[--text-secondary]">-</p>
+        </div>
+         <div class="card">
+            <h2 class="text-lg font-semibold mb-2">Add New Personnel</h2>
+            <button onclick="openAddPersonnelModal(null)" class="action-btn bg-[--accent-primary] hover:bg-[--accent-primary-hover] w-full text-base py-2"><i class="fas fa-user-plus"></i> Add Person</button>
+        </div>
+    </div>
+
+    <main id="organization-structure" class="space-y-4">
+        </main>
+
+    <button id="settings-btn" onclick="toggleSettingsPanel()">
+        <i class="fas fa-cog fa-spin-hover"></i> <style>
+             #settings-btn:hover i { animation: spin 1s linear infinite; }
+             @keyframes spin { 100% { transform: rotate(360deg); } }
+         </style>
+    </button>
+    <div id="settings-panel" class="card">
+         <button onclick="toggleSettingsPanel(false)" class="close-btn absolute top-2 right-3 text-xl">&times;</button> <div class="setting-group">
+            <label>Theme</label>
+            <div class="theme-btn-container">
+                <button id="theme-light-btn" onclick="setTheme('theme-light')" class="theme-btn">Light</button>
+                <button id="theme-dark-btn" onclick="setTheme('theme-dark')" class="theme-btn">Dark</button>
+                <button id="theme-military-btn" onclick="setTheme('theme-military')" class="theme-btn">Military</button>
+                <button id="theme-modern-btn" onclick="setTheme('theme-modern')" class="theme-btn">Modern</button>
+            </div>
+        </div>
+        <hr class="border-[--border-primary] my-4"> <div class="setting-group">
+            <label>HQ Border Color</label>
+            <div id="color-mphq" class="color-swatch-container"></div>
+        </div>
+        <div class="setting-group">
+            <label>1LEB Border Color</label>
+            <div id="color-1leb" class="color-swatch-container"></div>
+        </div>
+        <div class="setting-group">
+            <label>SRT Border Color</label>
+            <div id="color-srt" class="color-swatch-container"></div>
+        </div>
+        <div class="setting-group">
+            <label>CID Border Color</label>
+            <div id="color-cid" class="color-swatch-container"></div>
+        </div>
+    </div>
+
+
+    <div id="addPersonnelModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('addPersonnelModal')">&times;</span>
+            <h2 class="text-xl font-semibold mb-4">Add New Personnel</h2>
+            <label for="personnelName">Name:</label>
+            <input type="text" id="personnelName" placeholder="e.g., John Doe">
+            <label>Rank:</label>
+            <div id="personnelRankDropdown" class="custom-dropdown" data-placeholder="Select Rank"></div>
+            <label>Assign to Unit:</label>
+            <div id="personnelUnitDropdown" class="custom-dropdown" data-placeholder="Select Unit"></div>
+             <div id="personnelSquadContainer" style="display:none;">
+                 <label>Assign to Squad (1LEB Platoon Only):</label>
+                 <div id="personnelSquadDropdown" class="custom-dropdown" data-placeholder="Select Squad"></div>
+             </div>
+            <button onclick="addPersonnel()" class="modal-submit-btn">Add Personnel</button>
+        </div>
+    </div>
+    <div id="logActivityModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('logActivityModal')">&times;</span>
+            <h2 class="text-xl font-semibold mb-4">Log Activity for <span id="logActivityName" class="font-bold"></span></h2>
+            <input type="hidden" id="logActivityPersonnelId">
+            <label>Activity Type:</label>
+            <div id="activityTypeDropdown" class="custom-dropdown" data-placeholder="Select Activity"></div>
+            <div id="patrolHoursField">
+                <label for="patrolHours">Hours Patrolled:</label>
+                <input type="number" id="patrolHours" min="0" step="0.5" value="1">
+            </div>
+            <div id="eventAttendedTypeField" style="display: none;">
+                <label>Type of Event Attended:</label>
+                 <div id="eventAttendedTypeDropdown" class="custom-dropdown" data-placeholder="Select Event"></div>
+            </div>
+            <div id="eventHostedTypeField" style="display: none;">
+                <label>Type of Event Hosted:</label>
+                 <div id="eventHostedTypeDropdown" class="custom-dropdown" data-placeholder="Select Event"></div>
+            </div>
+             <div id="recruitingHoursField" style="display: none;">
+                <label for="recruitingHours">Hours Recruiting:</label>
+                <input type="number" id="recruitingHours" min="0" step="0.5" value="1">
+            </div>
+            <button onclick="submitLogActivity()" class="modal-submit-btn">Log Activity</button>
+        </div>
+    </div>
+     <div id="viewDetailsModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal('viewDetailsModal')">&times;</span>
+            <h2 class="text-xl font-semibold mb-4">Details for <span id="detailsName" class="font-bold"></span></h2>
+            <div id="detailsContent" class="text-[--text-secondary] space-y-2"></div>
+             <button onclick="resetPersonnelData()" class="mt-4 bg-[--warning] hover:bg-[--warning-hover] text-white font-bold py-2 px-4 rounded w-full action-btn">
+                Reset This Person's Weekly Data
+            </button>
+            <input type="hidden" id="detailsPersonnelId">
+        </div>
+    </div>
+
+
+    <script>
+        // --- Constants ---
+        const RANKS = {
+            // MPHQ
+            'O8': { name: 'Provost Marshall', type: 'Officer', unitType: ['MPHQ'] },
+            'O7': { name: 'Deputy Provost Marshall', type: 'Officer', unitType: ['MPHQ'] },
+            'E9b': { name: 'Provost Sergeant Major', type: 'Enlisted', unitType: ['MPHQ'] },
+            'O6_CoS': { name: 'Chief of Staff', type: 'Officer', unitType: ['MPHQ'] },
+            // Battalion
+            'O5_BnCO': { name: 'Battalion Commanding Officer', type: 'Officer', unitType: ['1LEB', 'SRT'] },
+            'O4_BnXO': { name: 'Battalion Executive Officer', type: 'Officer', unitType: ['1LEB', 'SRT'] },
+            'E9a': { name: 'Battalion Senior Enlisted Advisor', type: 'Enlisted', unitType: ['1LEB', 'SRT'] },
+            // --- Corrected Company/Platoon Slots ---
+            'O3_CoCO': { name: 'Company Commanding Officer', type: 'Officer', unitType: ['Company'] }, // Represents O3/O4
+            'E8b': { name: 'Company First Sergeant', type: 'Enlisted', unitType: ['Company'] },
+            'O1_PltCmdr_1LEB': { name: 'Platoon Commander', type: 'Officer', unitType: ['Platoon'] }, // Represents O1/O2
+            'E8a_PltSgt_1LEB': { name: 'Platoon Sergeant', type: 'Enlisted', unitType: ['Platoon'] },
+            'E7_AsstPltSgt_1LEB': { name: 'Platoon Assistant Sergeant', type: 'Enlisted', unitType: ['Platoon'] },
+            // --- Actual Ranks (Needed for filtering) ---
+             'O4': { name: 'O4', type: 'Officer', unitType: [] },
+             'O3': { name: 'O3', type: 'Officer', unitType: [] },
+             'O2': { name: 'O2', type: 'Officer', unitType: [] },
+             'O1': { name: 'O1', type: 'Officer', unitType: [] },
+             'E8a': { name: 'E8a', type: 'Enlisted', unitType: [] },
+             'E7': { name: 'E7', type: 'Enlisted', unitType: [] },
+            // SRT Unit Leader/Sergeant Roles
+            'O1_SRTUnitLdr': { name: 'Unit Leader (SRT)', type: 'Officer', unitType: ['SRTUnit'] }, // Represents O1/O2 role
+            'E7_SRTUnitSgt': { name: 'Unit Sergeant (SRT)', type: 'Enlisted', unitType: ['SRTUnit'] }, // Represents E7/E8a role
+            // CID (Specific Ranks)
+            'O6_CID': { name: 'Director (CID)', type: 'Officer', unitType: ['CID'] },
+            'O5_CID': { name: 'Deputy Director (CID)', type: 'Officer', unitType: ['CID'] },
+            // Non-Staff
+            'E6': { name: 'Provost Officer Grade 3', type: 'Enlisted', unitType: ['NonStaff'] },
+            'E5': { name: 'Provost Officer Grade 2', type: 'Enlisted', unitType: ['NonStaff'] },
+            'E4': { name: 'Provost Officer Grade 1', type: 'Enlisted', unitType: ['NonStaff'] },
+        };
+        const EVENT_TYPES = { /* ... V5 ... */
+            attendable: [ 'Classroom', 'Base Patrol', 'Combat Training', 'Practice Inspection', 'Group Recruiting', 'Game Night', 'Movie Night' ],
+            hostOnly: [ 'School of Policing', 'SRT Tryout', 'Unit Tryout' ]
+        };
+        const ALL_EVENT_TYPES = [...EVENT_TYPES.attendable, ...EVENT_TYPES.hostOnly];
+        const QUOTAS = { /* ... V5 ... */
+             '1LEB_NonStaff': { patrol: 1, eventsAttended: 2, eventsHosted: 0, recruiting: 0 },
+             'SRT_NonStaff': { patrol: 2, eventsAttended: 2, eventsHosted: 0, recruiting: 0 },
+             'PlatoonStaff': { patrol: 2, eventsAttended: 0, eventsHosted: 6, recruiting: 0 },
+             'BattalionStaff': { patrol: 1, eventsAttended: 0, eventsHosted: 4, recruiting: 1 },
+             'MPHQ': { patrol: 0, eventsAttended: 0, eventsHosted: 0, recruiting: 0 },
+             'CID': { patrol: 0, eventsAttended: 0, eventsHosted: 0, recruiting: 0 },
+        };
+        const MAX_PLATOONS_PER_COMPANY = 2;
+        const NATO_PHONETIC = ['Alpha', 'Bravo', 'Charlie', 'Delta', 'Echo', 'Foxtrot', 'Golf', 'Hotel', 'India', 'Juliett', 'Kilo', 'Lima', 'Mike', 'November', 'Oscar', 'Papa', 'Quebec', 'Romeo', 'Sierra', 'Tango', 'Uniform', 'Victor', 'Whiskey', 'X-ray', 'Yankee', 'Zulu'];
+        const COLOR_PALETTE = ['#2d3748', '#3182ce', '#9f7aea', '#dd6b20', '#38a169', '#e53e3e', '#d53f8c', '#6b46c1']; // Base colors
+
+        // --- State ---
+        const getDefaultOrganization = () => ({ /* ... V5 ... */
+            'MPHQ': { name: 'Military Police Headquarters', type: 'MPHQ', level: 1, personnel: [], commandSlots: ['O8', 'O7', 'E9b', 'O6_CoS'], subUnits: {} },
+            '1LEB': { name: '1st Law Enforcement Battalion', type: 'Battalion', level: 2, personnel: [], commandSlots: ['O5_BnCO', 'O4_BnXO', 'E9a'], subUnits: {} },
+            'SRT': { name: 'Special Reaction Team', type: 'Battalion', level: 2, personnel: [], commandSlots: ['O5_BnCO', 'O4_BnXO', 'E9a'], subUnits: {
+                    'ARU': { name: 'Armed Response Unit', type: 'SRTUnit', level: 3, personnel: [], commandSlots: ['O1_SRTUnitLdr', 'E7_SRTUnitSgt'], maxNonStaff: 6, subUnits: {} },
+                    'CPU': { name: 'Close Protection Unit (Closed)', type: 'SRTUnit', level: 3, personnel: [], commandSlots: ['O1_SRTUnitLdr', 'E7_SRTUnitSgt'], maxNonStaff: 6, subUnits: {} },
+                    'SSU': { name: 'Specialist Support Unit', type: 'SRTUnit', level: 3, personnel: [], commandSlots: ['O1_SRTUnitLdr', 'E7_SRTUnitSgt'], maxNonStaff: 6, subUnits: {} },
+                } },
+            'CID': { name: 'Criminal Investigation Division (Closed)', type: 'CID', level: 2, personnel: [], commandSlots: ['O6_CID', 'O5_CID'], subUnits: {} },
+        });
+        let organization = getDefaultOrganization();
+        let personnelData = {};
+        let nextPersonnelId = 1;
+        let autosaveTimeout;
+        let currentTheme = 'theme-light'; // Default theme class
+        let customColors = { // Store the *actual* selected color value
+            'MPHQ': null, // Null means use default theme color
+            '1LEB': null,
+            'SRT': null,
+            'CID': null
+        };
+        let officerWinnerId = null; // Store ID of winners
+        let enlistedWinnerId = null;
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadSettings(); // Load theme and colors first
+            loadData();
+            initializeCustomDropdowns();
+            initializeSettingsPanel(); // Setup theme/color buttons
+            renderOrganization(); // Initial render
+            calculateWeeklyAwards(); // Calculate winners
+            renderOrganization(); // Re-render to apply highlights
+            setupDropdownListeners();
+            document.body.addEventListener('click', (e) => {
+                 const panel = document.getElementById('settings-panel');
+                 const btn = document.getElementById('settings-btn');
+                 if (panel && panel.classList.contains('active') && !panel.contains(e.target) && e.target !== btn && !btn.contains(e.target)) {
+                     toggleSettingsPanel(false);
+                 }
+            });
+        });
+
+        // --- Settings & Theme ---
+        function loadSettings() {
+            const savedTheme = localStorage.getItem('mpTrackerTheme') || 'theme-light';
+            const savedColors = localStorage.getItem('mpTrackerColors');
+            setTheme(savedTheme, false);
+
+            if (savedColors) {
+                try {
+                    const loadedColors = JSON.parse(savedColors);
+                    if (typeof loadedColors === 'object' && loadedColors !== null) {
+                         Object.keys(customColors).forEach(key => {
+                             if (loadedColors.hasOwnProperty(key) && (typeof loadedColors[key] === 'string' || loadedColors[key] === null)) {
+                                 customColors[key] = loadedColors[key];
+                             }
+                         });
+                    }
+                } catch (e) { console.error("Error loading custom colors:", e); }
+            }
+            applyCustomColors();
+        }
+
+        function saveSettings() {
+            localStorage.setItem('mpTrackerTheme', currentTheme);
+            localStorage.setItem('mpTrackerColors', JSON.stringify(customColors));
+            console.log("Settings saved");
+        }
+
+        function setTheme(themeClassName, shouldSave = true) {
+            currentTheme = themeClassName;
+            document.documentElement.className = themeClassName;
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.id === `${themeClassName}-btn`);
+            });
+            applyCustomColors();
+            if (shouldSave) { saveSettings(); }
+        }
+
+        function setCustomColor(unitId, color) {
+             if (customColors.hasOwnProperty(unitId)) {
+                 customColors[unitId] = color;
+                 applyCustomColors();
+                 saveSettings();
+                 updateColorSwatches();
+             }
+        }
+
+        function applyCustomColors() {
+             const root = document.documentElement;
+             Object.keys(customColors).forEach(unitId => {
+                 const cssVarName = `--border-${unitId.toLowerCase()}`;
+                 let finalColor;
+                 if (customColors[unitId] === null || customColors[unitId] === 'default') {
+                     const baseColorVar = `--color-${unitId.toLowerCase()}-base`;
+                     finalColor = getComputedStyle(root).getPropertyValue(baseColorVar).trim();
+                 } else {
+                     finalColor = customColors[unitId];
+                 }
+                 root.style.setProperty(cssVarName, finalColor);
+             });
+             // Trigger re-render if necessary for color-mix changes (might not be needed if base vars are used correctly)
+             // renderOrganization(); // Avoid re-rendering just for color if possible
+        }
+
+
+        function initializeSettingsPanel() {
+             populateColorSwatches('color-mphq', 'MPHQ');
+             populateColorSwatches('color-1leb', '1LEB');
+             populateColorSwatches('color-srt', 'SRT');
+             populateColorSwatches('color-cid', 'CID');
+             updateColorSwatches();
+             document.getElementById(`${currentTheme}-btn`)?.classList.add('active');
+        }
+
+        function populateColorSwatches(containerId, unitId) {
+             const container = document.getElementById(containerId);
+             if (!container) return;
+             container.innerHTML = '';
+
+             const defaultSwatch = document.createElement('div');
+             defaultSwatch.className = 'color-swatch default-swatch';
+             defaultSwatch.textContent = 'Def';
+             defaultSwatch.title = 'Use Theme Default';
+             defaultSwatch.dataset.color = 'default';
+             defaultSwatch.onclick = () => setCustomColor(unitId, null);
+             container.appendChild(defaultSwatch);
+
+             COLOR_PALETTE.forEach(color => {
+                 const swatch = document.createElement('div');
+                 swatch.className = 'color-swatch';
+                 swatch.style.backgroundColor = color;
+                 swatch.dataset.color = color;
+                 swatch.onclick = () => setCustomColor(unitId, color);
+                 container.appendChild(swatch);
+             });
+        }
+
+        function updateColorSwatches() {
+             Object.keys(customColors).forEach(unitId => {
+                 const container = document.getElementById(`color-${unitId.toLowerCase()}`);
+                 if (container) {
+                     const swatches = container.querySelectorAll('.color-swatch');
+                     const currentColor = customColors[unitId];
+                     swatches.forEach(swatch => {
+                         const swatchColor = swatch.dataset.color;
+                         let isSelected = (currentColor === null && swatchColor === 'default') || (swatchColor !== 'default' && swatchColor === currentColor);
+                         swatch.classList.toggle('selected', isSelected);
+                     });
+                 }
+             });
+        }
+
+
+        function toggleSettingsPanel(forceState = null) { /* ... V5 ... */ const panel = document.getElementById('settings-panel'); if (panel) { const isActive = panel.classList.contains('active'); if (forceState === true) { panel.classList.add('active'); } else if (forceState === false) { panel.classList.remove('active'); } else { panel.classList.toggle('active'); } } }
+
+
+        // --- Custom Dropdown Functions ---
+        // [No Changes from V3]
+         function initializeCustomDropdowns() { /* ... V3 ... */ createCustomDropdownStructure('personnelRankDropdown'); createCustomDropdownStructure('personnelUnitDropdown'); createCustomDropdownStructure('personnelSquadDropdown'); createCustomDropdownStructure('activityTypeDropdown'); createCustomDropdownStructure('eventAttendedTypeDropdown'); createCustomDropdownStructure('eventHostedTypeDropdown'); }
+         function createCustomDropdownStructure(containerId) { /* ... V3 ... */ const container=document.getElementById(containerId); if (!container) return; const placeholder=container.dataset.placeholder||'Select...'; container.innerHTML=`<div class="dropdown-selected" tabindex="0"><span class="selected-text">${placeholder}</span><input type="hidden" class="dropdown-value"></div><div class="dropdown-options"></div>`; const selectedDiv=container.querySelector('.dropdown-selected'); selectedDiv.addEventListener('click', (e)=>{ e.stopPropagation(); toggleDropdown(containerId); }); selectedDiv.addEventListener('keydown', (e)=>{ if (e.key==='Enter'||e.key===' ') { e.preventDefault(); toggleDropdown(containerId); } }); }
+         function populateCustomDropdown(containerId, options, selectedValue = null, onSelectCallback = null) { /* ... V3 ... */ const container=document.getElementById(containerId); if (!container) return; const optionsContainer=container.querySelector('.dropdown-options'); const selectedTextSpan=container.querySelector('.selected-text'); const hiddenInput=container.querySelector('.dropdown-value'); const placeholder=container.dataset.placeholder||'Select...'; optionsContainer.innerHTML=''; let foundSelected=false; options.forEach(optionData=>{ const optionElement=document.createElement('div'); optionElement.className='dropdown-option'; optionElement.dataset.value=optionData.value; optionElement.textContent=optionData.text; if (optionData.disabled) { optionElement.classList.add('disabled'); } else { optionElement.addEventListener('click', (e)=>{ e.stopPropagation(); selectDropdownOption(containerId, optionData.value, optionData.text); closeAllDropdowns(); if (onSelectCallback) onSelectCallback(optionData.value); }); } if (optionData.value!==''&&optionData.value===selectedValue&&!optionData.disabled) { optionElement.classList.add('selected'); selectedTextSpan.textContent=optionData.text; hiddenInput.value=optionData.value; foundSelected=true; } optionsContainer.appendChild(optionElement); }); if (!foundSelected) { selectedTextSpan.textContent=placeholder; hiddenInput.value=''; } }
+         function toggleDropdown(containerId) { /* ... V3 ... */ const container=document.getElementById(containerId); if (!container) return; const isOpen=container.classList.contains('open'); closeAllDropdowns(); if (!isOpen) container.classList.add('open'); }
+         function selectDropdownOption(containerId, value, text) { /* ... V3 ... */ const container=document.getElementById(containerId); if (!container) return; const placeholder=container.dataset.placeholder||'Select...'; container.querySelector('.selected-text').textContent=value?text:placeholder; container.querySelector('.dropdown-value').value=value; const options=container.querySelectorAll('.dropdown-option'); options.forEach(opt=>{ opt.classList.toggle('selected', opt.dataset.value===value&&value!==''); }); }
+         function getDropdownValue(containerId) { /* ... V3 ... */ const container=document.getElementById(containerId); return container?container.querySelector('.dropdown-value').value:null; }
+         function setDropdownValue(containerId, value) { /* ... V3 ... */ const container=document.getElementById(containerId); if (!container) return; const option=container.querySelector(`.dropdown-option[data-value="${value}"]`); const placeholder=container.dataset.placeholder||'Select...'; if (option&&!option.classList.contains('disabled')) { selectDropdownOption(containerId, value, option.textContent); } else { selectDropdownOption(containerId, '', placeholder); } }
+         function setDropdownDisabled(containerId, isDisabled) { /* ... V3 ... */ const container=document.getElementById(containerId); if (!container) return; const selectedDiv=container.querySelector('.dropdown-selected'); container.style.opacity=isDisabled?'0.6':'1'; container.style.pointerEvents=isDisabled?'none':'auto'; selectedDiv.setAttribute('tabindex', isDisabled?'-1':'0'); }
+         function closeAllDropdowns() { /* ... V3 ... */ document.querySelectorAll('.custom-dropdown.open').forEach(dropdown=>dropdown.classList.remove('open')); }
+         function setupDropdownListeners() { /* ... V3 ... */ document.body.addEventListener('click', closeAllDropdowns); document.addEventListener('keydown', (e)=>{ if (e.key==='Escape') closeAllDropdowns(); }); }
+
+        // --- Data Persistence (Autosave) ---
+        // [No Changes from V3]
+        function saveData(showIndicator = false) { /* ... V3 ... */ try { localStorage.setItem('mpQuotaOrganization', JSON.stringify(organization)); localStorage.setItem('mpQuotaPersonnelData', JSON.stringify(personnelData)); localStorage.setItem('mpQuotaNextId', nextPersonnelId.toString()); console.log("Data autosaved."); if (showIndicator) showAutosaveIndicator(); } catch (error) { console.error("Error saving data:", error); const saveBtn = document.querySelector('.save-btn'); if(saveBtn) saveBtn.style.backgroundColor = '#E53E3E'; } }
+        function manualSave() { /* ... V3 ... */ saveData(true); alert('Data saved successfully!'); const saveBtn = document.querySelector('.save-btn'); if(saveBtn) saveBtn.style.backgroundColor = '#dd6b20'; }
+        function showAutosaveIndicator() { /* ... V3 ... */ const indicator = document.getElementById('autosave-indicator'); indicator.classList.add('visible'); clearTimeout(autosaveTimeout); autosaveTimeout = setTimeout(() => indicator.classList.remove('visible'), 2000); const saveBtn = document.querySelector('.save-btn'); if(saveBtn) saveBtn.style.backgroundColor = '#dd6b20'; }
+        function loadData() { /* ... V3 ... */ organization = getDefaultOrganization(); const savedOrgString = localStorage.getItem('mpQuotaOrganization'); const savedPersonnelString = localStorage.getItem('mpQuotaPersonnelData'); const savedNextIdString = localStorage.getItem('mpQuotaNextId'); let loadedOrgData = {}; if (savedOrgString) { try { loadedOrgData = JSON.parse(savedOrgString); } catch (e) { console.error("Error parsing saved organization data:", e); alert("Error loading organization structure. Resetting."); localStorage.removeItem('mpQuotaOrganization'); } } function safeMergeUnits(target, source) { if (!source || typeof source !== 'object') return; for (const unitId in source) { if (source.hasOwnProperty(unitId)) { const sourceUnit = source[unitId]; if (!sourceUnit || typeof sourceUnit !== 'object' || !sourceUnit.name || !sourceUnit.type) { console.warn(`Skipping invalid unit data during load for ID: ${unitId}`); continue; } if (!target[unitId]) { target[unitId] = JSON.parse(JSON.stringify(sourceUnit)); if (!target[unitId].personnel) target[unitId].personnel = []; if (!target[unitId].subUnits) target[unitId].subUnits = {}; if (target[unitId].type === 'Platoon' && !target[unitId].squads) { target[unitId].squads = { '1': { name: 'Squad 1', personnel: [] }, '2': { name: 'Squad 2', personnel: [] }, '3': { name: 'Squad 3', personnel: [] } }; } } else { target[unitId].personnel = Array.isArray(sourceUnit.personnel) ? [...sourceUnit.personnel] : []; target[unitId].name = sourceUnit.name; target[unitId].level = sourceUnit.level || target[unitId].level; if (sourceUnit.subUnits && typeof sourceUnit.subUnits === 'object') { if (!target[unitId].subUnits || typeof target[unitId].subUnits !== 'object') { target[unitId].subUnits = {}; } safeMergeUnits(target[unitId].subUnits, sourceUnit.subUnits); } else { if (!target[unitId].subUnits) target[unitId].subUnits = {}; } if (target[unitId].type === 'Platoon') { if (sourceUnit.squads && typeof sourceUnit.squads === 'object') { target[unitId].squads = JSON.parse(JSON.stringify(sourceUnit.squads)); Object.values(target[unitId].squads).forEach(s => { if (!Array.isArray(s.personnel)) s.personnel = []; }); } else if (!target[unitId].squads) { target[unitId].squads = { '1': { name: 'Squad 1', personnel: [] }, '2': { name: 'Squad 2', personnel: [] }, '3': { name: 'Squad 3', personnel: [] } }; } } } } } } safeMergeUnits(organization, loadedOrgData); if (savedPersonnelString) { try { personnelData = JSON.parse(savedPersonnelString); if (typeof personnelData !== 'object' || personnelData === null) { throw new Error("Personnel data is not an object."); } } catch (e) { console.error("Error parsing saved personnel data:", e); alert("Error loading personnel data. Resetting."); localStorage.removeItem('mpQuotaPersonnelData'); personnelData = {}; } } else { personnelData = {}; } if (savedNextIdString) { const parsedId = parseInt(savedNextIdString, 10); nextPersonnelId = !isNaN(parsedId) && parsedId > 0 ? parsedId : 1; } else { nextPersonnelId = 1; } const maxExistingId = Object.keys(personnelData).length > 0 ? Math.max(...Object.keys(personnelData).map(Number)) : 0; nextPersonnelId = Math.max(nextPersonnelId, maxExistingId + 1); console.log("Loaded Organization:", JSON.parse(JSON.stringify(organization))); console.log("Loaded Personnel Data:", JSON.parse(JSON.stringify(personnelData))); }
+
+        // --- Rendering Functions ---
+        function renderOrganization() {
+            // Re-calculate awards first to get latest winner IDs
+            calculateWeeklyAwards();
+
+            const container = document.getElementById('organization-structure');
+            container.innerHTML = '';
+            const fragment = document.createDocumentFragment();
+            const renderOrder = ['MPHQ', '1LEB', 'SRT', 'CID'];
+
+            function renderUnit(unitId, unitData, parentPath = '') {
+                if (!unitData || typeof unitData !== 'object') return;
+                const unitElement = document.createElement('div');
+                unitElement.className = `card unit-card unit-level-${unitData.level || 1}`;
+                unitElement.dataset.unitId = unitId;
+                const currentPath = parentPath ? `${parentPath}.${unitId}` : unitId;
+                unitElement.dataset.unitPath = currentPath;
+                // Apply custom border color dynamically
+                const borderColorVar = `--border-${unitId.toLowerCase()}`;
+                // Check if the unit ID exists in customColors before applying
+                if (customColors.hasOwnProperty(unitId.toUpperCase())) {
+                     unitElement.style.borderLeftColor = `var(${borderColorVar})`;
+                } else {
+                    // Fallback for dynamically added units (Companies/Platoons)
+                    if (currentPath.startsWith('1LEB.')) {
+                         // Use the faded 1LEB color logic from CSS
+                         // The static CSS rules handle this based on level and path prefix
+                    } else if (currentPath.startsWith('SRT.')) {
+                         unitElement.style.borderLeftColor = 'var(--border-srt)';
+                    }
+                    // Add more specific fallbacks if needed
+                }
+
+
+                const unitTitleElement = document.createElement('h3');
+                const titleText = document.createElement('span');
+                titleText.textContent = unitData.name || 'Unnamed Unit';
+                unitTitleElement.appendChild(titleText);
+                const unitActionsElement = document.createElement('span');
+                unitActionsElement.className = 'unit-actions';
+
+                if (unitData.type === 'Battalion' && unitId === '1LEB') {
+                    const addCompanyBtn = createActionButton('Add Company', 'fas fa-plus-circle', () => addUnit('Company', currentPath));
+                    unitActionsElement.appendChild(addCompanyBtn);
+                } else if (unitData.type === 'Company') {
+                    const addPlatoonBtn = createActionButton('Add Platoon', 'fas fa-plus-circle', () => addUnit('Platoon', currentPath));
+                    const existingPlatoons = unitData.subUnits ? Object.values(unitData.subUnits).filter(sub => sub.type === 'Platoon').length : 0;
+                    if (existingPlatoons >= MAX_PLATOONS_PER_COMPANY) {
+                        addPlatoonBtn.disabled = true;
+                        addPlatoonBtn.title = `Maximum ${MAX_PLATOONS_PER_COMPANY} platoons allowed.`;
+                    }
+                    unitActionsElement.appendChild(addPlatoonBtn);
+                }
+                unitTitleElement.appendChild(unitActionsElement);
+                unitElement.appendChild(unitTitleElement);
+
+                const personnelListElement = document.createElement('div');
+                personnelListElement.className = 'personnel-list mt-3';
+                renderPersonnelListContent(personnelListElement, unitId, unitData, currentPath);
+                unitElement.appendChild(personnelListElement);
+
+                fragment.appendChild(unitElement);
+
+                if (unitData.subUnits && typeof unitData.subUnits === 'object') {
+                    Object.keys(unitData.subUnits).sort().forEach(subUnitId => {
+                        renderUnit(subUnitId, unitData.subUnits[subUnitId], currentPath);
+                    });
+                }
+            }
+
+            renderOrder.forEach(unitId => {
+                if (organization[unitId]) {
+                    renderUnit(unitId, organization[unitId]);
+                }
+            });
+
+            container.appendChild(fragment);
+            populateUnitDropdown(); // Update dropdown after rendering
+        }
+
+        function createActionButton(text, iconClass, onClick) { /* ... V5 ... */ const button = document.createElement('button'); button.className = 'action-btn add-personnel-btn text-xs'; button.innerHTML = `<i class="${iconClass} mr-1"></i> ${text}`; button.onclick = (e) => { e.stopPropagation(); onClick(); }; return button; }
+
+        function renderPersonnelListContent(parentElement, unitId, unitData, currentPath) {
+            parentElement.innerHTML = '';
+
+            // Render Command Staff
+            if (unitData.commandSlots && Array.isArray(unitData.commandSlots) && unitData.commandSlots.length > 0) {
+                const commandHeader = document.createElement('h4'); commandHeader.textContent = 'Command Staff:'; parentElement.appendChild(commandHeader);
+                const currentPersonnelList = Array.isArray(unitData.personnel) ? unitData.personnel : [];
+                unitData.commandSlots.forEach(rankKey => {
+                    let roleName = RANKS[rankKey]?.name || rankKey;
+                    if (rankKey === 'O3_CoCO') roleName = 'Company Commander'; if (rankKey === 'O1_PltCmdr_1LEB') roleName = 'Platoon Commander'; if (rankKey === 'O1_SRTUnitLdr') roleName = 'Unit Leader'; if (rankKey === 'E7_SRTUnitSgt') roleName = 'Unit Sergeant';
+                    const assignedPersonnelId = currentPersonnelList.find(pId => personnelData[pId]?.commandSlot === rankKey);
+                    if (assignedPersonnelId && personnelData[assignedPersonnelId]) {
+                        parentElement.appendChild(renderPersonnel(assignedPersonnelId, personnelData[assignedPersonnelId]));
+                    } else {
+                        const emptySlotCard = document.createElement('div'); emptySlotCard.className = 'personnel-card border-dashed border-[--border-secondary]'; emptySlotCard.innerHTML = `<div class="personnel-info text-[--text-muted] italic">${roleName} (Empty Slot)</div><div class="personnel-actions"><button class="action-btn add-personnel-btn"><i class="fas fa-plus mr-1"></i> Assign</button></div>`; emptySlotCard.querySelector('button').onclick = (e) => { e.stopPropagation(); openAddPersonnelModal(currentPath, rankKey); }; parentElement.appendChild(emptySlotCard);
+                    }
+                });
+                parentElement.appendChild(document.createElement('hr')).className = 'my-3 border-[--border-primary]';
+            }
+
+            // Render Non-Command Personnel & Squads
+            const currentPersonnelList = Array.isArray(unitData.personnel) ? unitData.personnel : [];
+            const nonCommandPersonnel = currentPersonnelList.filter(pId => personnelData[pId] && !personnelData[pId]?.commandSlot);
+
+            if (unitData.type === 'Platoon') {
+                const nonStaffHeader = document.createElement('h4'); nonStaffHeader.textContent = 'Non-Staff Personnel:'; parentElement.appendChild(nonStaffHeader);
+                if (!unitData.squads || typeof unitData.squads !== 'object') unitData.squads = { '1': { name: 'Squad 1', personnel: [] }, '2': { name: 'Squad 2', personnel: [] }, '3': { name: 'Squad 3', personnel: [] } }; Object.values(unitData.squads).forEach(s => { if (!Array.isArray(s.personnel)) s.personnel = []; });
+                nonCommandPersonnel.forEach(pId => { if (personnelData[pId]) personnelData[pId].squad = null; }); Object.values(unitData.squads).forEach(squad => squad.personnel = []);
+                nonCommandPersonnel.forEach(pId => { if (!personnelData[pId]) return; let assigned = false; const sortedSquads = Object.entries(unitData.squads).sort(([,a], [,b]) => a.personnel.length - b.personnel.length); for (const [squadId, squad] of sortedSquads) { if (squad.personnel.length < 6) { squad.personnel.push(pId); personnelData[pId].squad = squadId; assigned = true; break; } } if (!assigned) console.warn(`Squads full in ${unitId}, cannot assign ${personnelData[pId].name}.`); });
+                Object.keys(unitData.squads).sort().forEach(squadId => { const squad = unitData.squads[squadId]; if (!squad) return; const squadElement = document.createElement('div'); squadElement.className = 'squad-list'; squadElement.innerHTML = `<h5 class="text-xs font-semibold text-[--text-muted] mb-1">${squad.name || `Squad ${squadId}`} (${squad.personnel?.length || 0}/6):</h5>`; (squad.personnel || []).forEach(pId => { if (personnelData[pId]) squadElement.appendChild(renderPersonnel(pId, personnelData[pId])); else console.warn(`Missing personnel data for ID ${pId} in squad ${squadId}`); }); parentElement.appendChild(squadElement); });
+            } else if (unitData.type === 'SRTUnit') {
+                const srtHeader = document.createElement('h4'); srtHeader.textContent = `Unit Members (${nonCommandPersonnel.length}/${unitData.maxNonStaff || 'N/A'}):`; parentElement.appendChild(srtHeader); nonCommandPersonnel.forEach(pId => { if (personnelData[pId]) parentElement.appendChild(renderPersonnel(pId, personnelData[pId])); });
+            } else if (unitId !== 'CID' && unitData.type !== 'Company' && unitData.type !== 'Platoon') {
+                if(nonCommandPersonnel.length > 0) { const generalHeader = document.createElement('h4'); generalHeader.textContent = 'Personnel:'; parentElement.appendChild(generalHeader); } nonCommandPersonnel.forEach(pId => { if (personnelData[pId]) parentElement.appendChild(renderPersonnel(pId, personnelData[pId])); });
+            }
+        }
+
+
+        function renderPersonnel(id, data, isNew = false) {
+            const element = document.createElement('div');
+            element.className = 'personnel-card';
+            if (isNew) element.classList.add('newly-added');
+            element.dataset.personnelId = id;
+
+            // --- Check if this person is a winner ---
+            const isOfficerWinner = id === officerWinnerId;
+            const isEnlistedWinner = id === enlistedWinnerId;
+            if (isOfficerWinner || isEnlistedWinner) {
+                element.classList.add('is-winner');
+            }
+
+            const rankInfo = RANKS[data.rank] || { name: data.rank, type: 'Unknown' };
+            const quotaStatus = checkQuota(id);
+
+            const infoDiv = document.createElement('div');
+            infoDiv.className = 'personnel-info';
+            const nameSpan = document.createElement('span');
+            nameSpan.className = 'font-medium'; // Base style
+            nameSpan.textContent = data.name || 'Unnamed';
+            infoDiv.appendChild(nameSpan);
+
+            // --- Add winner star ---
+             if (isOfficerWinner || isEnlistedWinner) {
+                 const starSpan = document.createElement('span');
+                 starSpan.className = 'winner-icon';
+                 starSpan.innerHTML = '<i class="fas fa-star"></i>';
+                 infoDiv.appendChild(starSpan); // Add star after name
+             }
+
+            infoDiv.appendChild(document.createTextNode(` - ${rankInfo.name} `));
+            const quotaSpan = document.createElement('span');
+            quotaSpan.className = `ml-2 ${quotaStatus.met ? 'quota-met' : 'quota-not-met'}`;
+            quotaSpan.innerHTML = `(${quotaStatus.met ? '<i class="fas fa-check-circle"></i> Met' : '<i class="fas fa-times-circle"></i> Unmet'})`;
+            infoDiv.appendChild(quotaSpan);
+            if (data.squad) {
+                const squadSpan = document.createElement('span');
+                squadSpan.className = 'text-xs text-[--text-muted] ml-1'; // Use themed muted text
+                squadSpan.textContent = `(Squad ${data.squad})`;
+                infoDiv.appendChild(squadSpan);
+            }
+
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'personnel-actions';
+            actionsDiv.innerHTML = `<button class="action-btn log-activity-btn"><i class="fas fa-clipboard-list mr-1"></i> Log</button><button class="action-btn view-details-btn"><i class="fas fa-eye mr-1"></i> Details</button><button class="action-btn remove-personnel-btn"><i class="fas fa-user-minus mr-1"></i> Remove</button>`;
+            actionsDiv.querySelector('.log-activity-btn').onclick = () => openLogActivityModal(id);
+            actionsDiv.querySelector('.view-details-btn').onclick = () => openViewDetailsModal(id);
+            actionsDiv.querySelector('.remove-personnel-btn').onclick = () => removePersonnel(id);
+
+            element.appendChild(infoDiv);
+            element.appendChild(actionsDiv);
+            return element;
+        }
+
+        // --- UI Interaction ---
+        // [No changes needed in modal open/close/reset logic]
+        function openModal(modalId) { document.getElementById(modalId).classList.add('active'); }
+        function closeModal(modalId) { const modal = document.getElementById(modalId); modal.classList.remove('active'); closeAllDropdowns(); setTimeout(() => { const inputs = modal.querySelectorAll('input[type="text"], input[type="number"], input[type="hidden"]'); inputs.forEach(input => { input.value = ''; }); const dropdowns = modal.querySelectorAll('.custom-dropdown'); dropdowns.forEach(dd => { if (dd.id) selectDropdownOption(dd.id, '', dd.dataset.placeholder || 'Select...'); }); if (modalId === 'logActivityModal') { setDropdownValue('activityTypeDropdown', 'patrol'); toggleEventSpecificFields(); } if (modalId === 'addPersonnelModal') { document.getElementById('personnelSquadContainer').style.display = 'none'; setDropdownDisabled('personnelRankDropdown', false); } delete document.getElementById('addPersonnelModal').dataset.targetCommandSlot; delete document.getElementById('addPersonnelModal').dataset.targetUnitPath; }, 300); }
+        function openAddPersonnelModal(unitPath = null, commandSlotRankKey = null) { /* ... V5 ... */ document.getElementById('personnelName').value = ''; setDropdownValue('personnelRankDropdown', ''); setDropdownValue('personnelUnitDropdown', ''); setDropdownValue('personnelSquadDropdown', ''); document.getElementById('personnelSquadContainer').style.display = 'none'; populateRankDropdown(commandSlotRankKey); if (unitPath) { setDropdownValue('personnelUnitDropdown', unitPath); handleUnitChangeForAddModal(); } if (commandSlotRankKey) { setDropdownDisabled('personnelRankDropdown', false); document.getElementById('addPersonnelModal').dataset.targetCommandSlot = commandSlotRankKey; document.getElementById('addPersonnelModal').dataset.targetUnitPath = unitPath; } else { setDropdownDisabled('personnelRankDropdown', false); delete document.getElementById('addPersonnelModal').dataset.targetCommandSlot; delete document.getElementById('addPersonnelModal').dataset.targetUnitPath; } openModal('addPersonnelModal'); }
+        function handleUnitChangeForAddModal() { /* ... V5 ... */ const unitPath = getDropdownValue('personnelUnitDropdown'); const unit = getUnitByPath(unitPath); const squadContainer = document.getElementById('personnelSquadContainer'); squadContainer.style.display = (unit && unit.type === 'Platoon' && unitPath.startsWith('1LEB')) ? 'block' : 'none'; }
+        function openLogActivityModal(personnelId) { /* ... V5 ... */ const person = personnelData[personnelId]; if (!person) return; document.getElementById('logActivityName').textContent = person.name; document.getElementById('logActivityPersonnelId').value = personnelId; setDropdownValue('activityTypeDropdown', 'patrol'); document.getElementById('patrolHours').value = 1; setDropdownValue('eventAttendedTypeDropdown', ''); setDropdownValue('eventHostedTypeDropdown', ''); document.getElementById('recruitingHours').value = 1; toggleEventSpecificFields(); const activityDropdownId = 'activityTypeDropdown'; const hostOptionValue = 'eventHosted'; const activityContainer = document.getElementById(activityDropdownId); if (activityContainer) { const hostOptionElement = activityContainer.querySelector(`.dropdown-option[data-value="${hostOptionValue}"]`); if (hostOptionElement) { const isNonStaffMember = isNonStaff(personnelId); hostOptionElement.classList.toggle('disabled', isNonStaffMember); if (isNonStaffMember && getDropdownValue(activityDropdownId) === hostOptionValue) { setDropdownValue(activityDropdownId, 'patrol'); toggleEventSpecificFields(); } } } openModal('logActivityModal'); }
+        function openViewDetailsModal(personnelId) { /* ... V5 ... */ const person = personnelData[personnelId]; if (!person) return; document.getElementById('detailsName').textContent = person.name; document.getElementById('detailsPersonnelId').value = personnelId; const detailsContent = document.getElementById('detailsContent'); const quotaStatus = checkQuota(personnelId); const rankInfo = RANKS[person.rank] || { name: person.rank }; const unitInfo = findPersonnelUnit(personnelId); const unitName = unitInfo ? getUnitByPath(unitInfo.path)?.name : 'Unknown Unit'; detailsContent.innerHTML = ''; function addDetail(label, value) { const p = document.createElement('p'); const strong = document.createElement('strong'); strong.textContent = label + ': '; p.appendChild(strong); if (typeof value === 'string' && value.includes('<')) { const span = document.createElement('span'); span.innerHTML = value; p.appendChild(span); } else { p.appendChild(document.createTextNode(value)); } detailsContent.appendChild(p); } function addList(label, items) { const p = document.createElement('p'); const strong = document.createElement('strong'); strong.textContent = label + ':'; p.appendChild(strong); detailsContent.appendChild(p); const ul = document.createElement('ul'); ul.className = 'list-disc list-inside text-sm pl-4'; if (items && items.length > 0) { items.forEach(item => { const li = document.createElement('li'); li.textContent = `${item.type} (${new Date(item.timestamp).toLocaleDateString()})`; ul.appendChild(li); }); } else { const li = document.createElement('li'); li.textContent = 'None'; ul.appendChild(li); } detailsContent.appendChild(ul); } addDetail('Rank', rankInfo.name); addDetail('Unit', `${unitName} ${person.squad ? `(Squad ${person.squad})` : ''}`); addDetail('Quota Status', `<span class="${quotaStatus.met ? 'quota-met' : 'quota-not-met'}">${quotaStatus.met ? '<i class="fas fa-check-circle"></i> Met' : '<i class="fas fa-times-circle"></i> Not Met'}</span>`); detailsContent.appendChild(document.createElement('hr')).className = 'my-2 border-[--border-primary]'; addDetail('Patrol Hours Logged', `${person.patrolHours || 0} / ${quotaStatus.required.patrol}`); const validAttendedEventsCount = (person.eventsAttended || []).filter(event => EVENT_TYPES.attendable.includes(event.type)).length; addDetail('Events Attended Logged', `${validAttendedEventsCount} / ${quotaStatus.required.eventsAttended}`); addDetail('Events Hosted Logged', `${person.eventsHosted?.length || 0} / ${quotaStatus.required.eventsHosted}`); addDetail('Recruiting Hours Logged', `${person.recruitingHours || 0} / ${quotaStatus.required.recruiting}`); detailsContent.appendChild(document.createElement('hr')).className = 'my-2 border-[--border-primary]'; addList('Logged Attended Events', person.eventsAttended); addList('Logged Hosted Events', person.eventsHosted); openModal('viewDetailsModal'); }
+        function toggleEventSpecificFields() { /* ... V5 ... */ const activityType = getDropdownValue('activityTypeDropdown'); document.getElementById('patrolHoursField').style.display = activityType === 'patrol' ? 'block' : 'none'; document.getElementById('eventAttendedTypeField').style.display = activityType === 'eventAttended' ? 'block' : 'none'; document.getElementById('eventHostedTypeField').style.display = activityType === 'eventHosted' ? 'block' : 'none'; document.getElementById('recruitingHoursField').style.display = activityType === 'groupRecruiting' ? 'block' : 'none'; }
+
+        // --- Core Logic ---
+        function addPersonnel() { /* ... V5 ... */ const name = document.getElementById('personnelName').value.trim(); const rank = getDropdownValue('personnelRankDropdown'); const unitPath = getDropdownValue('personnelUnitDropdown'); const squad = getDropdownValue('personnelSquadDropdown'); const targetCommandSlotKey = document.getElementById('addPersonnelModal').dataset.targetCommandSlot; if (!name || !rank || !unitPath) { alert('Please fill in Name, Rank, and Unit.'); return; } const unit = getUnitByPath(unitPath); if (!unit) { alert('Selected unit not found.'); return; } if (!Array.isArray(unit.personnel)) unit.personnel = []; let commandSlotToAssign = null; if (targetCommandSlotKey) { const allowedRanks = getAllowedRanksForSlot(targetCommandSlotKey); if (!allowedRanks.includes(rank)) { const slotRoleName = RANKS[targetCommandSlotKey]?.name || targetCommandSlotKey; alert(`Invalid rank (${RANKS[rank]?.name || rank}) selected for the ${slotRoleName} slot.`); return; } const existingAssignment = unit.personnel.find(pId => personnelData[pId]?.commandSlot === targetCommandSlotKey); if (existingAssignment) { alert(`Command slot is already filled.`); return; } commandSlotToAssign = targetCommandSlotKey; } const newId = nextPersonnelId++; const personData = { id: newId, name: name, rank: rank, unitPath: unitPath, commandSlot: commandSlotToAssign, squad: null, patrolHours: 0, eventsAttended: [], eventsHosted: [], recruitingHours: 0 }; const isPlatoon = unit.type === 'Platoon' && unitPath.startsWith('1LEB'); const isNonStaffRank = RANKS[rank]?.unitType.includes('NonStaff'); if (!commandSlotToAssign && isPlatoon && isNonStaffRank) { if (!squad) { alert('Please select a squad.'); nextPersonnelId--; return; } if (!unit.squads) unit.squads = { '1':{personnel:[]}, '2':{personnel:[]}, '3':{personnel:[]} }; if (!unit.squads[squad]) unit.squads[squad] = { personnel: [] }; if (!Array.isArray(unit.squads[squad].personnel)) unit.squads[squad].personnel = []; if (unit.squads[squad].personnel.length < 6) { unit.squads[squad].personnel.push(newId); personData.squad = squad; unit.personnel.push(newId); } else { alert(`Squad ${squad} is full.`); nextPersonnelId--; return; } } else { unit.personnel.push(newId); } personnelData[newId] = personData; console.log("Added Personnel:", personData); console.log("Updated Unit:", unit); closeModal('addPersonnelModal'); renderOrganization(); calculateWeeklyAwards(); saveData(true); }
+        function removePersonnel(personnelId) { /* ... V5 ... */ if (!confirm(`Are you sure you want to remove ${personnelData[personnelId]?.name}?`)) return; const person = personnelData[personnelId]; if (!person) return; const unitInfo = findPersonnelUnit(personnelId); if (unitInfo) { const unit = getUnitByPath(unitInfo.path); if (unit) { if (person.squad && unit.squads && unit.squads[person.squad] && Array.isArray(unit.squads[person.squad].personnel)) { unit.squads[person.squad].personnel = unit.squads[person.squad].personnel.filter(id => id !== personnelId); } if(Array.isArray(unit.personnel)) unit.personnel = unit.personnel.filter(id => id !== personnelId); } } else { console.warn("Could not find unit for personnel ID:", personnelId); } delete personnelData[personnelId]; renderOrganization(); calculateWeeklyAwards(); saveData(true); }
+        function submitLogActivity() { /* ... V5 ... */ const personnelId = parseInt(document.getElementById('logActivityPersonnelId').value, 10); const activityType = getDropdownValue('activityTypeDropdown'); const person = personnelData[personnelId]; if (!person) { alert('Personnel not found.'); return; } if (!activityType) { alert('Please select an activity type.'); return; } const timestamp = Date.now(); let dataChanged = false; switch (activityType) { case 'patrol': const ph = parseFloat(document.getElementById('patrolHours').value) || 0; if (ph > 0) { person.patrolHours = (person.patrolHours || 0) + ph; dataChanged = true; } else { alert("Invalid hours."); return; } break; case 'eventAttended': const eat = getDropdownValue('eventAttendedTypeDropdown'); if (eat) { if (!person.eventsAttended) person.eventsAttended = []; person.eventsAttended.push({ type: eat, timestamp }); dataChanged = true; } else { alert("Select event type."); return; } break; case 'eventHosted': if (isNonStaff(personnelId)) { alert("Non-staff cannot host."); return; } const eht = getDropdownValue('eventHostedTypeDropdown'); if (eht) { if (!person.eventsHosted) person.eventsHosted = []; person.eventsHosted.push({ type: eht, timestamp }); dataChanged = true; } else { alert("Select event type."); return; } break; case 'groupRecruiting': const rh = parseFloat(document.getElementById('recruitingHours').value) || 0; if (rh > 0) { person.recruitingHours = (person.recruitingHours || 0) + rh; dataChanged = true; } else { alert("Invalid hours."); return; } break; } if (dataChanged) { closeModal('logActivityModal'); renderOrganization(); calculateWeeklyAwards(); saveData(true); } }
+        function resetPersonnelData() { /* ... V5 ... */ const personnelId = parseInt(document.getElementById('detailsPersonnelId').value, 10); if (!personnelId || !personnelData[personnelId]) { alert("Personnel not found."); return; } if (!confirm(`Reset weekly data for ${personnelData[personnelId].name}?`)) return; const person = personnelData[personnelId]; person.patrolHours = 0; person.eventsAttended = []; person.eventsHosted = []; person.recruitingHours = 0; closeModal('viewDetailsModal'); renderOrganization(); calculateWeeklyAwards(); saveData(true); alert(`${person.name}'s data reset.`); }
+
+        // --- Quota Calculation Logic ---
+        // [No Changes from V3]
+        function getQuotaCategory(personnelId) { const person = personnelData[personnelId]; if (!person || !person.rank) return null; const rankInfo = RANKS[person.rank]; if (!rankInfo) return null; const unitInfo = findPersonnelUnit(personnelId); if (!unitInfo) return null; const unit = getUnitByPath(unitInfo.path); if (!unit) return null; if (unitInfo.path === 'MPHQ') return 'MPHQ'; if (unitInfo.path === 'CID') return 'CID'; if ((unitInfo.path === '1LEB' || unitInfo.path === 'SRT') && person.commandSlot && ['O5_BnCO', 'O4_BnXO', 'E9a'].includes(person.commandSlot)) return 'BattalionStaff'; const isPlatoonOrUnitStaffSlot = ['O1_PltCmdr_1LEB', 'E8a_PltSgt_1LEB', 'E7_AsstPltSgt_1LEB', 'O1_SRTUnitLdr', 'E7_SRTUnitSgt'].includes(person.commandSlot); const isInPlatoonOrSRTUnit = unit.type === 'Platoon' || unit.type === 'SRTUnit'; if (isInPlatoonOrSRTUnit && isPlatoonOrUnitStaffSlot) return 'PlatoonStaff'; const isCompanyStaffSlot = ['O3_CoCO', 'E8b'].includes(person.commandSlot); const isInCompany = unit.type === 'Company'; if (isInCompany && isCompanyStaffSlot) return 'MPHQ'; if (rankInfo.unitType.includes('NonStaff') && !person.commandSlot) { if (unitInfo.path.startsWith('1LEB')) return '1LEB_NonStaff'; if (unitInfo.path.startsWith('SRT')) return 'SRT_NonStaff'; if (unitInfo.path.startsWith('MPHQ') || unitInfo.path.startsWith('CID')) return 'MPHQ'; } console.warn(`Could not determine quota category for ${person.name}. Assigning default.`); return 'MPHQ'; }
+        function isNonStaff(personnelId) { const cat = getQuotaCategory(personnelId); return cat === '1LEB_NonStaff' || cat === 'SRT_NonStaff'; }
+        function isStaff(personnelId) { const cat = getQuotaCategory(personnelId); return cat !== '1LEB_NonStaff' && cat !== 'SRT_NonStaff'; }
+        function checkQuota(personnelId) { const person = personnelData[personnelId]; if (!person) return { met: false, required: {} }; const category = getQuotaCategory(personnelId); const validCategory = category && QUOTAS[category] ? category : 'MPHQ'; const required = QUOTAS[validCategory]; let met = true; if (required.patrol > 0 && (person.patrolHours || 0) < required.patrol) met = false; if (required.eventsAttended > 0) { const validAttended = (person.eventsAttended || []).filter(e => EVENT_TYPES.attendable.includes(e.type)); if (validAttended.length < required.eventsAttended) met = false; } if (required.eventsHosted > 0 && (person.eventsHosted || []).length < required.eventsHosted) met = false; if (required.recruiting > 0 && (person.recruitingHours || 0) < required.recruiting) met = false; return { met, required }; }
+
+        // Updated calculateWeeklyAwards to store winner IDs
+        function calculateWeeklyAwards() {
+            let officerScores = []; let enlistedScores = [];
+            officerWinnerId = null; // Reset winners
+            enlistedWinnerId = null;
+
+            Object.keys(personnelData).forEach(idStr => {
+                const id = parseInt(idStr, 10); const person = personnelData[id]; if (!person || !person.rank) return;
+                const rankInfo = RANKS[person.rank]; const unitInfo = findPersonnelUnit(id); if (!unitInfo || unitInfo.path === 'MPHQ' || unitInfo.path === 'CID' || !rankInfo) return;
+                const validAttendedCount = (person.eventsAttended || []).filter(e => EVENT_TYPES.attendable.includes(e.type)).length; const hostedCount = (person.eventsHosted || []).length;
+                const score = (Number(person.patrolHours) || 0) + validAttendedCount + hostedCount + (Number(person.recruitingHours) || 0);
+                if (rankInfo.type === 'Officer') officerScores.push({ id, name: person.name, score });
+                else if (rankInfo.type === 'Enlisted') enlistedScores.push({ id, name: person.name, score });
+            });
+            officerScores.sort((a, b) => b.score - a.score); enlistedScores.sort((a, b) => b.score - a.score);
+
+            const officerWinner = officerScores.length > 0 && officerScores[0].score > 0 ? `${officerScores[0].name} (Score: ${officerScores[0].score})` : '-';
+            const enlistedWinner = enlistedScores.length > 0 && enlistedScores[0].score > 0 ? `${enlistedScores[0].name} (Score: ${enlistedScores[0].score})` : '-';
+
+            // Store IDs
+            if (officerScores.length > 0 && officerScores[0].score > 0) officerWinnerId = officerScores[0].id;
+            if (enlistedScores.length > 0 && enlistedScores[0].score > 0) enlistedWinnerId = enlistedScores[0].id;
+
+            document.getElementById('officer-of-week').textContent = officerWinner;
+            document.getElementById('enlisted-of-week').textContent = enlistedWinner;
+
+            // Important: Need to re-render after calculating winners to apply highlights
+            // However, avoid infinite loops. Call renderOrganization() *after* this in initialization and data updates.
+        }
+
+        // --- Utility Functions ---
+        // Helper to get allowed ranks for a specific command slot key
+        function getAllowedRanksForSlot(slotRankKey) {
+             // Define mappings for roles that accept multiple ranks
+              const slotMappings = {
+                  'O3_CoCO': ['O3', 'O4'], // Company Commander can be O3 or O4
+                  'O1_PltCmdr_1LEB': ['O1', 'O2'], // 1LEB Platoon Commander can be O1 or O2
+                  'O1_SRTUnitLdr': ['O1', 'O2'], // SRT Unit Leader can be O1 or O2
+                  'E7_SRTUnitSgt': ['E7', 'E8a'], // SRT Unit Sergeant can be E7 or E8a
+                  // Add other single-rank slots if needed, though default handles them
+                  'O8': ['O8'], 'O7': ['O7'], 'E9b': ['E9b'], 'O6_CoS': ['O6_CoS'],
+                  'O5_BnCO': ['O5_BnCO'], 'O4_BnXO': ['O4_BnXO'], 'E9a': ['E9a'],
+                  'E8b': ['E8b'], 'E8a_PltSgt_1LEB': ['E8a'], // Plt Sgt is only E8a
+                  'E7_AsstPltSgt_1LEB': ['E7'], // Asst Plt Sgt is only E7
+                  'O6_CID': ['O6_CID'], 'O5_CID': ['O5_CID'],
+              };
+              // Find the base rank key if the input is one of the specific rank keys (e.g. O4 maps back to O3_CoCO)
+              // This might be complex, simpler to just use the mappings directly based on the slot key provided.
+              return slotMappings[slotRankKey] || [slotRankKey]; // Return mapped ranks or just the key itself
+          }
+
+         // Updated populateRankDropdown to filter based on target slot
+         function populateRankDropdown(targetCommandSlotKey = null) {
+             const rankOptions = [{ value: '', text: 'Select Rank', disabled: true }];
+             let ranksToShow = {}; // Use object { rankKey: rankName }
+
+             let allowedRankKeys;
+             if (targetCommandSlotKey) {
+                 // Get the list of allowed rank KEYS (e.g., ['O3', 'O4'] for 'O3_CoCO')
+                 allowedRankKeys = getAllowedRanksForSlot(targetCommandSlotKey);
+             } else {
+                 // Show all defined ranks if not assigning to a slot
+                 allowedRankKeys = Object.keys(RANKS);
+             }
+
+             // Populate ranksToShow using the allowed keys
+             allowedRankKeys.forEach(key => {
+                 if (RANKS[key]) {
+                     ranksToShow[key] = RANKS[key].name;
+                 } else {
+                     console.warn(`Rank key "${key}" defined in slot mapping but not found in RANKS definition.`);
+                 }
+             });
+
+             // Convert collected ranks to dropdown options, sorted by name
+             Object.entries(ranksToShow).sort(([, nameA], [, nameB]) => nameA.localeCompare(nameB)).forEach(([key, name]) => {
+                 rankOptions.push({ value: key, text: name });
+             });
+
+             populateCustomDropdown('personnelRankDropdown', rankOptions);
+         }
+
+         // [No Changes from V3 for other populate... functions]
+         function populateSquadDropdown() { const squadOptions = [ { value: '', text: 'Select Squad', disabled: true }, { value: '1', text: 'Squad 1' }, { value: '2', text: 'Squad 2' }, { value: '3', text: 'Squad 3' }, ]; populateCustomDropdown('personnelSquadDropdown', squadOptions); }
+         function populateActivityDropdown() { const activityOptions = [ { value: '', text: 'Select Activity', disabled: true }, { value: 'patrol', text: 'Patrol' }, { value: 'eventAttended', text: 'Event Attended' }, { value: 'eventHosted', text: 'Event Hosted' }, { value: 'groupRecruiting', text: 'Group Recruiting' }, ]; populateCustomDropdown('activityTypeDropdown', activityOptions, 'patrol', toggleEventSpecificFields); }
+         function populateEventDropdowns() { const attendedOptions = [{ value: '', text: 'Select Event', disabled: true }]; EVENT_TYPES.attendable.forEach(event => attendedOptions.push({ value: event, text: event })); populateCustomDropdown('eventAttendedTypeDropdown', attendedOptions); const hostedOptions = [{ value: '', text: 'Select Event', disabled: true }]; ALL_EVENT_TYPES.forEach(event => hostedOptions.push({ value: event, text: event })); populateCustomDropdown('eventHostedTypeDropdown', hostedOptions); }
+
+         // Updated populateUnitDropdown to use V3 logic (no nesting assumption)
+         function populateUnitDropdown() {
+             const unitOptions = [{ value: '', text: 'Select Unit', disabled: true }];
+             function generateOptions(units, currentPath = '', indent = 0) {
+                 if (!units || typeof units !== 'object') return;
+                 const unitIdsToProcess = currentPath === '' ? ['MPHQ', '1LEB', 'SRT', 'CID'] : Object.keys(units).sort();
+                 unitIdsToProcess.forEach(unitId => {
+                     const unitData = units[unitId];
+                     if (!unitData || typeof unitData !== 'object') return;
+                     const path = currentPath ? `${currentPath}.${unitId}` : unitId;
+                     const isDisabled = unitData.name?.toLowerCase().includes('(closed)');
+                     unitOptions.push({ value: path, text: `${'--'.repeat(indent)} ${unitData.name || 'Unnamed Unit'}`, disabled: !!isDisabled });
+                     if (unitData.subUnits && typeof unitData.subUnits === 'object') {
+                         generateOptions(unitData.subUnits, path, indent + 1);
+                     }
+                 });
+             }
+             generateOptions(organization);
+             populateCustomDropdown('personnelUnitDropdown', unitOptions, null, handleUnitChangeForAddModal);
+         }
+
+
+         // getUnitByPath (Reverted to V3 logic)
+         function getUnitByPath(path) { if (!path || typeof path !== 'string') return null; const parts = path.split('.'); let currentLevel = organization; for (const part of parts) { if (!currentLevel || typeof currentLevel !== 'object') return null; if (currentLevel.hasOwnProperty(part)) { currentLevel = currentLevel[part]; } else if (currentLevel.subUnits && currentLevel.subUnits.hasOwnProperty(part)) { currentLevel = currentLevel.subUnits[part]; } else { return null; } } return (typeof currentLevel === 'object' && currentLevel !== null) ? currentLevel : null; }
+
+        // findPathForUnit (Reverted to V3 logic)
+        function findPathForUnit(unitIdToFind, currentUnits, currentPath = '') { for (const [unitId, unitData] of Object.entries(currentUnits)) { const path = currentPath ? `${currentPath}.${unitId}` : unitId; if (unitId === unitIdToFind) { return path; } if (unitData.subUnits && typeof unitData.subUnits === 'object') { const foundPath = findPathForUnit(unitIdToFind, unitData.subUnits, path); if (foundPath) { return foundPath; } } } return null; }
+
+        // findPersonnelUnit (Reverted to V3 logic)
+        function findPersonnelUnit(personnelId) { const targetId = typeof personnelId === 'string' ? parseInt(personnelId, 10) : personnelId; if (isNaN(targetId)) return null; function searchUnit(units, currentPath = '') { for (const [unitId, unitData] of Object.entries(units)) { if (typeof unitData !== 'object' || unitData === null) continue; const path = currentPath ? `${currentPath}.${unitId}` : unitId; if (Array.isArray(unitData.personnel) && unitData.personnel.includes(targetId)) return { unit: unitData, path: path }; if (unitData.squads && typeof unitData.squads === 'object') { for (const squad of Object.values(unitData.squads)) { if (squad && Array.isArray(squad.personnel) && squad.personnel.includes(targetId)) return { unit: unitData, path: path }; } } if (unitData.subUnits && typeof unitData.subUnits === 'object') { const found = searchUnit(unitData.subUnits, path); if (found) return found; } } return null; } return searchUnit(organization); }
+
+
+         // --- Dynamic Unit Management (Added Auto-Naming) ---
+         function addUnit(unitType, parentPath) {
+             const parentUnit = getUnitByPath(parentPath);
+             if (!parentUnit) { alert("Error: Parent unit could not be found."); console.error("Parent unit not found for path:", parentPath); return; }
+             if (typeof parentUnit.subUnits !== 'object' || parentUnit.subUnits === null) { parentUnit.subUnits = {}; }
+
+             let unitName = '';
+             let newUnitId = '';
+
+             if (unitType === 'Company' && parentPath === '1LEB') {
+                 const existingCompanyCount = Object.values(parentUnit.subUnits).filter(sub => sub.type === 'Company').length;
+                 if (existingCompanyCount < NATO_PHONETIC.length) {
+                     unitName = `${NATO_PHONETIC[existingCompanyCount]} Company`;
+                     newUnitId = unitName.trim().replace(/[^a-zA-Z0-9_]/g, '_').toLowerCase() + '_' + Date.now();
+                 } else { alert("Max NATO names reached!"); return; }
+             } else if (unitType === 'Platoon' && parentUnit.type === 'Company') {
+                 const existingPlatoonCount = Object.values(parentUnit.subUnits).filter(sub => sub.type === 'Platoon').length;
+                 if (existingPlatoonCount >= MAX_PLATOONS_PER_COMPANY) { alert(`Max ${MAX_PLATOONS_PER_COMPANY} platoons allowed.`); return; }
+                 unitName = existingPlatoonCount === 0 ? '1st Platoon' : '2nd Platoon';
+                 newUnitId = unitName.trim().replace(/[^a-zA-Z0-9_]/g, '_').toLowerCase() + '_' + Date.now();
+             } else {
+                 const promptedName = prompt(`Enter the name for the new ${unitType}:`, `New ${unitType}`);
+                 if (!promptedName || promptedName.trim() === '') { alert("Unit name cannot be empty."); return; }
+                 unitName = promptedName.trim();
+                 newUnitId = unitName.replace(/[^a-zA-Z0-9_]/g, '_').toLowerCase() + '_' + Date.now();
+             }
+
+             let newUnitData = { name: unitName, type: unitType, level: (parentUnit.level || 0) + 1, personnel: [], subUnits: {}, isDynamic: true };
+
+             if (unitType === 'Company') {
+                 newUnitData.commandSlots = ['O3_CoCO', 'E8b'];
+             } else if (unitType === 'Platoon') {
+                 newUnitData.commandSlots = ['O1_PltCmdr_1LEB', 'E8a_PltSgt_1LEB', 'E7_AsstPltSgt_1LEB'];
+                 newUnitData.squads = { '1': { name: 'Squad 1', personnel: [] }, '2': { name: 'Squad 2', personnel: [] }, '3': { name: 'Squad 3', personnel: [] } };
+             }
+
+             parentUnit.subUnits[newUnitId] = newUnitData;
+             console.log(`Added ${unitType} '${newUnitData.name}' (ID: ${newUnitId}) to parent ${parentUnit.name}.`);
+
+             renderOrganization(); // Re-render includes winner highlighting now
+             calculateWeeklyAwards(); // Recalculate (though winner IDs are set, this updates display text)
+             saveData(true);
+             console.log("Organization after adding unit and saving:", JSON.parse(JSON.stringify(organization)));
+         }
+
+    </script>
+
+</body>
+</html>
